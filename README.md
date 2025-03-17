@@ -1,5 +1,3 @@
-MFA API Service Documentation /\* Basic styles \*/ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 1100px; margin: 0 auto; padding: 2rem; } h1, h2, h3, h4 { color: #1a1a1a; } h1 { border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin-top: 0; } h2 { margin-top: 2rem; padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; } code { font-family: Menlo, Monaco, Consolas, "Courier New", monospace; background-color: #f5f5f5; padding: 0.2em 0.4em; border-radius: 3px; font-size: 0.9em; } pre { background-color: #f5f5f5; padding: 1rem; overflow: auto; border-radius: 5px; margin: 1.5rem 0; } pre code { background-color: transparent; padding: 0; font-size: 0.9rem; line-height: 1.4; display: block; } .container { display: flex; flex-wrap: wrap; } .sidebar { flex: 0 0 25%; position: sticky; top: 20px; height: fit-content; padding-right: 2rem; } .content { flex: 1; min-width: 0; } .nav-list { list-style: none; padding-left: 0; } .nav-list li { margin-bottom: 0.75rem; } .nav-list a { color: #0366d6; text-decoration: none; } .nav-list a:hover { text-decoration: underline; } .endpoint { background-color: #f8f9fa; border-radius: 5px; padding: 1rem; margin-bottom: 1.5rem; border-left: 4px solid #0366d6; } .endpoint h4 { margin-top: 0; margin-bottom: 0.5rem; } .method { display: inline-block; padding: 0.2rem 0.6rem; color: white; border-radius: 3px; font-weight: bold; font-size: 0.8rem; margin-right: 0.5rem; min-width: 60px; text-align: center; } .post { background-color: #49cc90; } .get { background-color: #61affe; } .delete { background-color: #f93e3e; } .path { font-family: monospace; font-weight: bold; } .separator { margin-top: 1rem; margin-bottom: 1rem; border: 0; border-top: 1px solid #eaecef; } table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; } th, td { border: 1px solid #e1e4e8; padding: 8px 12px; text-align: left; } th { background-color: #f6f8fa; } .json-response { background-color: #282c34; color: #abb2bf; padding: 1rem; border-radius: 5px; overflow: auto; } .json-key { color: #e06c75; } .json-string { color: #98c379; } .json-number { color: #d19a66; } .json-boolean { color: #56b6c2; } @media (max-width: 768px) { .container { flex-direction: column; } .sidebar { flex: 0 0 100%; position: static; padding-right: 0; margin-bottom: 2rem; }
-
 ### Table of Contents
 
 *   [Features](#features)
@@ -13,10 +11,10 @@ MFA API Service Documentation /\* Basic styles \*/ body { font-family: -apple-sy
 *   [Deployment](#deployment)
 *   [Postman Collection](#postman-collection)
 
-MFA API Service
+Reauth-Stamp
 ===============
 
-A RESTful API service for managing Multi-Factor Authentication (MFA) codes, similar to 1Password. This service allows you to securely store and retrieve TOTP tokens for various services via API calls.
+A RESTful API service for managing Multi-Factor Authentication (MFA) codes, similar to popular commercial tools like 1Password or Okta. This service allows you to securely store and retrieve TOTP tokens for various services via API calls.
 
 Features
 --------
@@ -78,16 +76,13 @@ Getting Started
 
 ### Installation
 
-1.  Clone the repository
-    
-        git clone https://github.com/[todo]
-        cd reauth-stamp
+1.  Clone the repository and `cd` into it.
     
 2.  Install dependencies
     
         npm install
     
-3.  Configure environment variables in `.env` file
+3.  Configure environment variables in `.env` file. You will need to generate/create these.
     
         PORT=3000
         MONGO_URI=mongodb://localhost:27017/mfa_service
