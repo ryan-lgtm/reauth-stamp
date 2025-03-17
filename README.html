@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFA API Service Documentation</title>
+    <style>
+        /* Basic styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #1a1a1a;
+        }
+        
+        h1 {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        h2 {
+            margin-top: 2rem;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        code {
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+            background-color: #f5f5f5;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 1rem;
+            overflow: auto;
+            border-radius: 5px;
+            margin: 1.5rem 0;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            display: block;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .sidebar {
+            flex: 0 0 25%;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            padding-right: 2rem;
+        }
+        
+        .content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .nav-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .nav-list li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .nav-list a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        
+        .nav-list a:hover {
+            text-decoration: underline;
+        }
+        
+        .endpoint {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #0366d6;
+        }
+        
+        .endpoint h4 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            color: white;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .post {
+            background-color: #49cc90;
+        }
+        
+        .get {
+            background-color: #61affe;
+        }
+        
+        .delete {
+            background-color: #f93e3e;
+        }
+        
+        .path {
+            font-family: monospace;
+            font-weight: bold;
+        }
+        
+        .separator {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            border: 0;
+            border-top: 1px solid #eaecef;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        
+        th, td {
+            border: 1px solid #e1e4e8;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f6f8fa;
+        }
+        
+        .json-response {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow: auto;
+        }
+        
+        .json-key {
+            color: #e06c75;
+        }
+        
+        .json-string {
+            color: #98c379;
+        }
+        
+        .json-number {
+            color: #d19a66;
+        }
+        
+        .json-boolean {
+            color: #56b6c2;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                flex: 0 0 100%;
+                position: static;
+                padding-right: 0;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Table of Contents</h3>
+            <ul class="nav-list">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#tech-stack">Tech Stack</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#security-model">Security Model</a></li>
+                <li><a href="#api-endpoints">API Endpoints</a>
+                    <ul>
+                        <li><a href="#authentication">Authentication</a></li>
+                        <li><a href="#mfa-management">MFA Management</a></li>
+                    </ul>
+                </li>
+                <li><a href="#usage-examples">Usage Examples</a></li>
+                <li><a href="#deployment">Deployment</a></li>
+                <li><a href="#postman">Postman Collection</a></li>
+            </ul>
+        </aside>
+        
+        <main class="content">
+            <h1>MFA API Service</h1>
+            
+            <p>A RESTful API service for managing Multi-Factor Authentication (MFA) codes, similar to 1Password. This service allows you to securely store and retrieve TOTP tokens for various services via API calls.</p>
+            
+            <section id="features">
+                <h2>Features</h2>
+                
+                <ul>
+                    <li><strong>Secure API Token Authentication</strong>: Role-based access with master tokens</li>
+                    <li><strong>TOTP Code Generation</strong>: Compatible with standard MFA apps</li>
+                    <li><strong>Flexible MFA Secret Format</strong>: Automatically handles spaces and formatting in MFA secrets</li>
+                    <li><strong>RESTful API Design</strong>: Easy to integrate with other services</li>
+                    <li><strong>MongoDB Storage</strong>: Scalable and efficient data storage</li>
+                </ul>
+            </section>
+            
+            <section id="tech-stack">
+                <h2>Tech Stack</h2>
+                
+                <ul>
+                    <li><strong>Node.js</strong>: Server runtime</li>
+                    <li><strong>TypeScript</strong>: Type-safe code</li>
+                    <li><strong>Express.js</strong>: Web framework</li>
+                    <li><strong>MongoDB</strong>: Document database</li>
+                    <li><strong>OTPLib</strong>: TOTP generation library</li>
+                </ul>
+            </section>
+            
+            <section id="getting-started">
+                <h2>Getting Started</h2>
+                
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>Node.js 14+</li>
+                    <li>MongoDB 4.4+</li>
+                    <li>npm or yarn</li>
+                </ul>
+                
+                <h3>MongoDB Installation</h3>
+                
+                <h4>macOS (with Homebrew)</h4>
+                <pre><code class="language-bash"># Update Homebrew
+brew update
+
+# Install MongoDB Community Edition
+brew tap mongodb/brew
+brew install mongodb-community
+
+# Start MongoDB as a service
+brew services start mongodb-community</code></pre>
+                
+                <h4>Ubuntu/Debian</h4>
+                <pre><code class="language-bash"># Import MongoDB public GPG key
+wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+
+# Create list file for MongoDB
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+
+# Reload package database
+sudo apt-get update
+
+# Install MongoDB
+sudo apt-get install -y mongodb-org
+
+# Start MongoDB
+sudo systemctl start mongod</code></pre>
+                
+                <h3>Installation</h3>
+                <ol>
+                    <li>
+                        <p>Clone the repository</p>
+                        <pre><code class="language-bash">git clone https://github.com/[todo]
+cd reauth-stamp</code></pre>
+                    </li>
+                    <li>
+                        <p>Install dependencies</p>
+                        <pre><code class="language-bash">npm install</code></pre>
+                    </li>
+                    <li>
+                        <p>Configure environment variables in <code>.env</code> file</p>
+                        <pre><code>PORT=3000
+MONGO_URI=mongodb://localhost:27017/mfa_service
+NODE_ENV=development
+ENCRYPTION_KEY=your-secure-encryption-key
+ENCRYPTION_IV=your-secure-iv</code></pre>
+                    </li>
+                    <li>
+                        <p>Start the development server</p>
+                        <pre><code class="language-bash">npm run dev</code></pre>
+                    </li>
+                    <li>
+                        <p>Build for production</p>
+                        <pre><code class="language-bash">npm run build
+npm start</code></pre>
+                    </li>
+                </ol>
+            </section>
+            
+            <section id="security-model">
+                <h2>Security Model</h2>
+                
+                <p>This service uses a "master token" system:</p>
+                
+                <ul>
+                    <li>Master tokens never expire and are used to manage other tokens</li>
+                    <li>Regular API tokens can be configured to expire or never expire</li>
+                    <li>Only requests authenticated with a master token can create new API tokens</li>
+                    <li>A master token is a special API token with elevated privileges</li>
+                    <li>Regular API tokens can only access MFA functionality</li>
+                    <li>The first master token needs to be created using the initialization script</li>
+                    <li>If a master token is compromised, it can be reset with a new value using another master token</li>
+                </ul>
+                
+                <h3>Creating a Master Token</h3>
+                
+                <p>To create the initial master token:</p>
+                
+                <pre><code class="language-bash">npm run init-master-token</code></pre>
+                
+                <p>This will output a token that should be saved securely. This token will be used to create all other tokens.</p>
+
+                <h3>Security Best Practices</h3>
+                
+                <p>For better security, we recommend creating at least two master tokens:</p>
+                <ul>
+                    <li>A primary master token for regular use</li>
+                    <li>A backup master token kept secure for emergency purposes (like resetting a compromised token)</li>
+                </ul>
+            </section>
+            
+            <section id="api-endpoints">
+                <h2>API Documentation</h2>
+                
+                <p>All API requests expect and return JSON. Authentication is performed via Bearer token.</p>
+                
+                <h3>Authentication Header</h3>
+                <pre><code>Authorization: Bearer YOUR_API_TOKEN</code></pre>
+                
+                <h3 id="authentication">Authentication Endpoints</h3>
+                
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="path">/api/auth/tokens</span></h4>
+                    <p><strong>Description:</strong> Create a new API token (requires master token)</p>
+                    
+                    <p><strong>Request Body:</strong></p>
+                    <pre><code class="language-json">{
+  "name": "Token Name",
+  "userId": "user123",
+  "expiresInDays": 30  // Optional - if omitted, token never expires
+}</code></pre>
+                    
+                    <p><strong>Response:</strong></p>
+                    <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "id": "tokenId",
+    "name": "Token Name",
+    "token": "generated-uuid-token",
+    "expiresAt": "2023-07-15T00:00:00.000Z", // Will be null if token never expires
+    "createdAt": "2023-06-15T00:00:00.000Z"
+  }
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="path">/api/auth/tokens/:userId</span></h4>
+                    <p><strong>Description:</strong> List all tokens for a user</p>
+                    
+                    <p><strong>Response:</strong></p>
+                    <pre><code class="language-json">{
+  "success": true,
+  "data": [
+    {
+      "id": "tokenId",
+      "name": "Token Name",
+      "lastUsed": "2023-06-15T00:00:00.000Z",
+      "expiresAt": "2023-07-15T00:00:00.000Z",
+      "createdAt": "2023-06-15T00:00:00.000Z",
+      "isActive": true
+    }
+  ]
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="path">/api/auth/tokens/:id/revoke</span></h4>
+                    <p><strong>Description:</strong> Revoke a token</p>
+                    
+                    <p><strong>Response:</strong></p>
+                    <pre><code class="language-json">{
+  "success": true,
+  "message": "Token revoked successfully"
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="path">/api/auth/validate</span></h4>
+                    <p><strong>Description:</strong> Validate a token</p>
+                    
+                    <p><strong>Response:</strong></p>
+                    <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "id": "tokenId",
+    "userId": "user123",
+    "name": "Token Name",
+    "expiresAt": "2023-07-15T00:00:00.000Z"
+  }
+}</code></pre>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="path">/api/auth/tokens/:id/reset-master</span></h4>
+                    <p><strong>Description:</strong> Reset a master token with a new token value (requires master token)</p>
+                    
+                    <p><strong>Response:</strong></p>
+                    <pre><code class="language-json">{
+  "success": true,
+  "message": "Master token reset successfully",
+  "data": {
+    "id": "masterTokenId",
+    "name": "Master Token",
+    "token": "new-token-value",
+    "createdAt": "2023-06-15T00:00:00.000Z"
+  }
+}</code></pre>
+                </div>
+                
+                <h3 id="mfa-management">MFA Endpoints</h3>
+                
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="path">/api/mfa</span></h4>
+                    <p><strong>Description:</strong> Create a new MFA secret</p>
+                    
+                    <p><strong>Request Body:</strong></p>
+                    <pre><code class="language-json">{
+  "name": "Google Account",
+  "initialAuth": "JBSW Y3DP EHPK 3PXP"  // Spaces are automatically removed
+}</code></pre>
+                    
+                    <p><strong>Response:</strong></p>
+                    <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "id": "mfaSecretId",
+    "name": "Google Account",
+    "createdAt": "2023-06-15T00:00:00.000Z"
+  }
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="path">/api/mfa/:id/code</span></h4>
+                    <p><strong>Description:</strong> Get current TOTP code for a specific MFA secret</p>
+                    
+                    <p><strong>Response:</strong></p>
+                    <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "id": "mfaSecretId",
+    "name": "Google Account",
+    "code": "123456",
+    "validUntil": "2023-06-15T00:00:30.000Z",
+    "secondsRemaining": 18
+  }
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="path">/api/mfa</span></h4>
+                    <p><strong>Description:</strong> List all MFA secrets</p>
+                    
+                    <p><strong>Response:</strong></p>
+                    <pre><code class="language-json">{
+  "success": true,
+  "data": [
+    {
+      "_id": "mfaSecretId",
+      "name": "Google Account",
+      "createdAt": "2023-06-15T00:00:00.000Z",
+      "updatedAt": "2023-06-15T00:00:00.000Z"
+    }
+  ]
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h4><span class="method delete">DELETE</span><span class="path">/api/mfa/:id</span></h4>
+                    <p><strong>Description:</strong> Delete an MFA secret</p>
+                    
+                    <p><strong>Response:</strong></p>
+                    <pre><code class="language-json">{
+  "success": true,
+  "message": "MFA secret deleted successfully"
+}</code></pre>
+                </div>
+            </section>
+            
+            <section id="usage-examples">
+                <h2>Usage Examples</h2>
+                
+                <h3>Creating an MFA Entry</h3>
+                <pre><code class="language-bash">curl -X POST http://localhost:3000/api/mfa \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"My Google Account", "initialAuth":"JBSWY3DPEHPK3PXP"}'</code></pre>
+                
+                <h3>Getting an MFA Code</h3>
+                <pre><code class="language-bash">curl -X GET http://localhost:3000/api/mfa/mfaSecretId/code \
+  -H "Authorization: Bearer YOUR_API_TOKEN"</code></pre>
+                
+  <h3>Creating a Regular API Token (requires master token)</h3>
+  <p>Create a token that expires in 30 days:</p>
+  <pre><code class="language-bash">curl -X POST http://localhost:3000/api/auth/tokens \
+    -H "Authorization: Bearer YOUR_MASTER_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{"name":"App Token", "userId":"user123", "expiresInDays":30}'</code></pre>
+  
+  <p>Create a token that never expires:</p>
+  <pre><code class="language-bash">curl -X POST http://localhost:3000/api/auth/tokens \
+    -H "Authorization: Bearer YOUR_MASTER_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{"name":"Permanent Token", "userId":"user123"}'</code></pre>
+                
+                <h4>Handling Shell Quoting Issues</h4>
+                <p>If you encounter quote-related errors in your shell, try one of these approaches:</p>
+                
+                <p><strong>Option 1:</strong> Escape the inner quotes</p>
+                <pre><code class="language-bash">curl -X POST http://localhost:3000/api/auth/tokens \
+  -H "Authorization: Bearer YOUR_MASTER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{\"name\":\"App Token\",\"userId\":\"user123\",\"expiresInDays\":30}"</code></pre>
+                
+                <p><strong>Option 2:</strong> Use a JSON file</p>
+                <p>Create a file named <code>payload.json</code>:</p>
+                <pre><code class="language-json">{
+  "name": "App Token",
+  "userId": "user123",
+  "expiresInDays": 30
+}</code></pre>
+                
+                <p>Then use:</p>
+                <pre><code class="language-bash">curl -X POST http://localhost:3000/api/auth/tokens \
+  -H "Authorization: Bearer YOUR_MASTER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d @payload.json</code></pre>
+            </section>
+            
+            <section id="deployment">
+                <h2>Deployment</h2>
+                
+                <p>For production deployment:</p>
+                
+                <ol>
+                    <li>Set up a production MongoDB instance</li>
+                    <li>Configure proper environment variables</li>
+                    <li>Build the TypeScript code: <code>npm run build</code></li>
+                    <li>Run with a process manager like PM2: <code>pm2 start dist/app.js</code></li>
+                    <li>Set up proper HTTPS with a reverse proxy like Nginx or use a service like Heroku</li>
+                </ol>
+            </section>
+            
+            <section id="postman">
+                <h2>Postman Collection</h2>
+                
+                <p>A complete Postman collection is included for easier API testing and integration.</p>
+                
+                <h3>Importing the Collection</h3>
+                <ol>
+                    <li>Download <a href="https://www.postman.com/downloads/" target="_blank">Postman</a> if you don't already have it</li>
+                    <li>Open Postman and click <strong>Import</strong> in the top-left corner</li>
+                    <li>Choose <strong>File</strong> &gt; <strong>Upload Files</strong> and select <code>postman.json</code> from the project root</li>
+                    <li>Click <strong>Import</strong> to finish</li>
+                </ol>
+                
+                <h3>Setting Up Environment Variables</h3>
+                <ol>
+                    <li>Click on <strong>Environments</strong> in the left sidebar</li>
+                    <li>Click <strong>Add</strong> to create a new environment (e.g., "ReAuth-Stamp Local")</li>
+                    <li>Add the following variables:</li>
+                </ol>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Initial Value</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>baseUrl</td>
+                            <td>http://localhost:3000</td>
+                            <td>The base URL of your API</td>
+                        </tr>
+                        <tr>
+                            <td>masterToken</td>
+                            <td>(Your master token)</td>
+                            <td>Master token from init-master-token script</td>
+                        </tr>
+                        <tr>
+                            <td>apiToken</td>
+                            <td>(Leave empty)</td>
+                            <td>Will be auto-filled when created</td>
+                        </tr>
+                        <tr>
+                            <td>userId</td>
+                            <td>user123</td>
+                            <td>User ID for operations</td>
+                        </tr>
+                        <tr>
+                            <td>tokenId</td>
+                            <td>(Leave empty)</td>
+                            <td>Will be auto-filled when needed</td>
+                        </tr>
+                        <tr>
+                            <td>mfaSecretId</td>
+                            <td>(Leave empty)</td>
+                            <td>Will be auto-filled when needed</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <ol start="4">
+                    <li>Click <strong>Save</strong></li>
+                    <li>Select your environment from the environment dropdown in the top-right corner</li>
+                </ol>
+                
+                <h3>Using the Collection</h3>
+                <p>The collection is organized into logical sections:</p>
+                
+                <ol>
+                    <li><strong>Authentication</strong>: API token management operations
+                        <ul>
+                            <li>Create API Token (requires master token)</li>
+                            <li>List User Tokens</li>
+                            <li>Revoke Token</li>
+                            <li>Validate Token</li>
+                        </ul>
+                    </li>
+                    <li><strong>MFA Management</strong>: MFA secret operations
+                        <ul>
+                            <li>Create MFA Secret</li>
+                            <li>Get MFA Code</li>
+                            <li>List MFA Secrets</li>
+                            <li>Delete MFA Secret</li>
+                        </ul>
+                    </li>
+                    <li><strong>Health Check</strong>: Simple API health check</li>
+                </ol>
+                
+                <p>The collection includes automatic tests that will:</p>
+                <ul>
+                    <li>Validate successful responses</li>
+                    <li>Automatically capture IDs and tokens from responses</li>
+                    <li>Set environment variables for subsequent requests</li>
+                </ul>
+                
+                <h3>Workflow Example</h3>
+                <ol>
+                    <li>Run the "Health Check" request to verify the API is running</li>
+                    <li>Create a new API token using the "Create API Token" request (requires master token)</li>
+                    <li>The token will automatically be saved to the <code>apiToken</code> environment variable</li>
+                    <li>Use that token to create an MFA secret with "Create MFA Secret"</li>
+                    <li>Get the current code with "Get MFA Code" whenever needed</li>
+                </ol>
+
+                <div class="endpoint">
+                    <h4>Automatic Variable Handling</h4>
+                    <p>The Postman collection includes scripts that automatically:</p>
+                    <ul>
+                        <li>Save the token ID when creating a new API token</li>
+                        <li>Store the MFA secret ID when creating a new MFA secret</li>
+                        <li>Save the API token value for subsequent requests</li>
+                    </ul>
+                    <p>This eliminates the need to manually copy IDs between requests.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
