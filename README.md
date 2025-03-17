@@ -14,7 +14,11 @@
 Reauth-Stamp
 ===============
 
-A RESTful API service for managing Multi-Factor Authentication (MFA) codes, similar to popular commercial tools like 1Password or Okta. This service allows you to securely store and retrieve TOTP tokens for various services via API calls.
+A RESTful API-as-a-Service project for managing Multi-Factor Authentication (MFA) codes, similar to popular commercial tools like 1Password or Okta. This service allows you to securely store and retrieve TOTP tokens for various services via API calls.
+
+Use Cases
+===============
+Maybe you're tired of handling 2FA via SMS to your phone all the time, or you're building a software stack and don't want to offload MFA to a third-party service. Perhaps you're bootstrapping a product and want MFA handled natively? Who knows! But Reauth-Stamp can be a thoughtful backend service for streamlining MFA.
 
 Features
 --------
